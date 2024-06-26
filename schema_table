@@ -1,0 +1,11 @@
+CREATE TABLE vehicles (
+    id SERIAL PRIMARY KEY,
+    vehicle_type VARCHAR(255),
+    vehicle_model VARCHAR(255),
+    price VARCHAR(255),
+    passenger_no VARCHAR(50),
+    luggage_no VARCHAR(50),
+    date_time VARCHAR(255),
+    pickup_location VARCHAR(255),
+    dropoff_location VARCHAR(255)
+);
