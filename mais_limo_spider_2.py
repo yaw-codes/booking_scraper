@@ -73,6 +73,13 @@ def get_args():
                         metavar='dropoff location text',
                         type=str,
                         default='sandy springs')
+    
+    parser.add_argument('-si',
+                        '--stop_location',
+                        help='Stop location as a string ',
+                        metavar='Stop location text',
+                        type=str,
+                        default='BMW')
 
     parser.add_argument('-stop',
                         '--add_stop',
@@ -187,28 +194,28 @@ def drop_off_location(dropoff_location_str):
              ))).click()
 
 
-def add_stop(bool_stop):
+def add_stop(stop_location):
     """checks to see whether we need stops"""
-    if bool_stop:
-        # Locate the <a> element by its ID
-        add_stop_link = driver.find_element(By.ID, 'addNewStopLink')
+    
+    # Locate the <a> element by its ID
+    add_stop_link = driver.find_element(By.ID, 'addNewStopLink')
 
-        # Click the element
-        add_stop_link.click()
+    # Click the element
+    add_stop_link.click()
 
-        # after clicking add a stop link
-        # Locate the input element by its ID
-        stop_input = driver.find_element(By.ID, 'Stops_1_')
+    # after clicking add a stop link
+    # Locate the input element by its ID
+    stop_input = driver.find_element(By.ID, 'Stops_1_')
 
-        # Set the input value
-        stop_input.clear()  # Clear the input field first, if necessary
-        stop_input.send_keys('BMW')  # Replace with your desired stop location
+    # Set the input value
+    stop_input.clear()  # Clear the input field first, if necessary
+    stop_input.send_keys(stop_location)  # Replace with your desired stop location
 
-        wait.until(
-            EC.element_to_be_clickable(
-                (By.XPATH,
-                 "//div[@id='Stops_1_SuggestionDiv']/ul//li[position()=1]"
-                 ))).click()
+    wait.until(
+        EC.element_to_be_clickable(
+            (By.XPATH,
+                "//div[@id='Stops_1_SuggestionDiv']/ul//li[position()=1]"
+                ))).click()
 
 
 def no_passengers(pass_num):
@@ -264,21 +271,21 @@ def luggage_count(luggage_num):
                           luggage_input)
 
 
-def return_at_diff_location(bool_rtn_loc):
+def return_at_diff_location():
     """clicks the return to diff location checkbox"""
-    if bool_rtn_loc:
-        # Locate the checkbox using its ID
-        checkbox = driver.find_element(By.ID, 'showDropoffLocation')
+  
+    # Locate the checkbox using its ID
+    checkbox = driver.find_element(By.ID, 'showDropoffLocation')
 
-        # Scroll to the checkbox if necessary (sometimes required for elements not in view)
-        ActionChains(driver).move_to_element(checkbox).perform()
+    # Scroll to the checkbox if necessary (sometimes required for elements not in view)
+    ActionChains(driver).move_to_element(checkbox).perform()
 
-        # Click the checkbox to check it
-        checkbox.click()
+    # Click the checkbox to check it
+    checkbox.click()
 
-        # # Optional: Verify if the checkbox is selected
-        # is_selected = checkbox.is_selected()
-        # print(f"Checkbox selected: {is_selected}")
+    # # Optional: Verify if the checkbox is selected
+    # is_selected = checkbox.is_selected()
+    # print(f"Checkbox selected: {is_selected}")
 
 
 def select_vehicle():
@@ -291,33 +298,21 @@ def select_vehicle():
 
 def click_rate_details_buttons():
     """Click the rate details button for each vehicle item."""
-    #first implementation
-    # try:
-    #     vehicle_items = wait.until(EC.presence_of_all_elements_located((By.CLASS_NAME, "vehicle-grid-item-price")))
-    #     for vehicle_item in vehicle_items:
-    #         try:
-    #             button = vehicle_item.find_element(By.CLASS_NAME, "vehicle-decription-btn")
-    #             driver.execute_script("arguments[0].scrollIntoView(true);", button)
-    #             button.click()
-    #         except Exception as e:
-    #             print(f"Could not click the button for a vehicle item: {e}")
-    # except Exception as e:
-    #     print(f"An error occurred while trying to click rate details buttons: {e}")
-
-    #second implementation
     try:
-        vehicle_items = wait.until(
+        wait.until(
             EC.presence_of_all_elements_located(
                 (By.CLASS_NAME, "vehicle-grid-item-price")))
+        
+        vehicle_items = driver.find_elements(By.CLASS_NAME,
+                                                     "vehicle-grid-item-price")
         for vehicle_item in vehicle_items:
             try:
                 #there are two vehicle description buttons in the vehicle item .. we need to select the second one
-                buttons = vehicle_item.find_elements(By.CLASS_NAME,
+                button = vehicle_item.find_element(By.CLASS_NAME,
                                                      "vehicle-decription-btn")
-                # Scroll to the button to make sure it is in view (optional, depending on the page layout)
-                ActionChains(driver).move_to_element(price_button).perform()
-                price_button = buttons[1]
-                price_button.click()
+                driver.execute_script("arguments[0].scrollIntoView(true);", button)
+                button.click()
+               
             except Exception as e:
                 print(f"Could not click the button for a vehicle item: {e}")
     except Exception as e:
@@ -362,6 +357,7 @@ def click_next_until_disabled():
             # Click the page button
             page_button.click()
             print(f"Clicked page {page_num + 1}")
+
         except (NoSuchElementException, ElementClickInterceptedException,
                 StaleElementReferenceException) as e:
             print("No longer clickable or not found:", e)
@@ -385,6 +381,7 @@ def main():
     hr_num = args.hr_num
     luggage_num = args.luggage_num
     bool_rtn_loc = args.bool_rtn_loc
+    stop_location = args.stop_location
 
     try:
         driver.maximize_window()
@@ -399,6 +396,8 @@ def main():
             select_service(service_type)
             select_date(date_str)
             select_time(time_str)
+            if bool_stop:
+                add_stop(stop_location)
             pickUp_location(pickup_location_str)
             drop_off_location(dropoff_location_str)
             no_passengers(pass_num)
@@ -407,10 +406,12 @@ def main():
             click_next_until_disabled()
 
         elif service_type == 1:
-            """if service type is from airport"""
+            """if service type is To airport"""
             select_service(service_type)
             select_date(date_str)
             select_time(time_str)
+            if bool_stop:
+                add_stop(stop_location)
             pickUp_location(pickup_location_str)
             drop_off_location(dropoff_location_str)
             no_passengers(pass_num)
@@ -423,6 +424,8 @@ def main():
             select_service(service_type)
             select_date(date_str)
             select_time(time_str)
+            if bool_stop:
+                add_stop(stop_location)
             pickUp_location(pickup_location_str)
             drop_off_location(dropoff_location_str)
             no_passengers(pass_num)
@@ -436,7 +439,10 @@ def main():
             select_date(date_str)
             select_time(time_str)
             pickUp_location(pickup_location_str)
-            drop_off_location(dropoff_location_str)
+            if bool_rtn_loc:
+                return_at_diff_location()
+                drop_off_location(dropoff_location_str)
+            no_hours(hr_num)
             no_passengers(pass_num)
             luggage_count(luggage_num)
             select_vehicle()
