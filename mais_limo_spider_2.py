@@ -95,6 +95,7 @@ def get_args():
                         '--hr_num',
                         help='no of hours int',
                         metavar='int',
+                        default=3,
                         type=int)
 
     parser.add_argument('-lc',
