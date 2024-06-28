@@ -51,13 +51,13 @@ def get_args():
 
     parser.add_argument('-d',
                         '--date',
-                        help='Date as a string in the form mm/dd/yyy',
+                        help='Date as a string in the form mm/dd/yyyy',
                         metavar='date text',
                         type=str,
                         default='06/30/2024')
     parser.add_argument('-t',
                         '--time',
-                        help='Time as a string in the form hh:mm AM',
+                        help='Time as a string in the form hh:mm AM/PM',
                         metavar='time text',
                         type=str,
                         default="10:30 AM")
@@ -307,7 +307,7 @@ def click_rate_details_buttons():
                                                      "vehicle-grid-item-price")
         for vehicle_item in vehicle_items:
             try:
-                #there are two vehicle description buttons in the vehicle item .. we need to select the second one
+                #select the vechicle description_btn
                 button = vehicle_item.find_element(By.CLASS_NAME,
                                                      "vehicle-decription-btn")
                 driver.execute_script("arguments[0].scrollIntoView(true);", button)
@@ -391,8 +391,8 @@ def main():
         time.sleep(10)
         switch_to_frame()
 
-        if service_type == 0:
-            """if service type is from airport"""
+        if service_type < 3:
+            """if service type is from airport/to Aiport/point-to-point"""
             select_service(service_type)
             select_date(date_str)
             select_time(time_str)
@@ -405,35 +405,7 @@ def main():
             select_vehicle()
             click_next_until_disabled()
 
-        elif service_type == 1:
-            """if service type is To airport"""
-            select_service(service_type)
-            select_date(date_str)
-            select_time(time_str)
-            if bool_stop:
-                add_stop(stop_location)
-            pickUp_location(pickup_location_str)
-            drop_off_location(dropoff_location_str)
-            no_passengers(pass_num)
-            luggage_count(luggage_num)
-            select_vehicle()
-            click_next_until_disabled()
-
-        elif service_type == 2:
-            """if service type is point to point"""
-            select_service(service_type)
-            select_date(date_str)
-            select_time(time_str)
-            if bool_stop:
-                add_stop(stop_location)
-            pickUp_location(pickup_location_str)
-            drop_off_location(dropoff_location_str)
-            no_passengers(pass_num)
-            luggage_count(luggage_num)
-            select_vehicle()
-            click_next_until_disabled()
-
-        elif service_type == 3:
+        else:
             """if service type is hourly"""
             select_service(service_type)
             select_date(date_str)
