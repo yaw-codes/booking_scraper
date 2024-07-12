@@ -6,6 +6,9 @@ import json
 # import time
 from datetime import time
 import datetime
+from PIL import Image
+from io import StringIO
+# import cv2
 #learning streamlit
 
 #st.text(This is just a text"")
@@ -248,9 +251,179 @@ places = pd.DataFrame({
 #     placeholder = "Whats on your mind"
 # )
 
-# st.write(txt)
+# # st.write(txt)
 
-date = st.date_input("Enter your birthday", value = datetime.date(2024,7,11))
-st.write(date)
+# date = st.date_input("Enter your birthday", value = datetime.date(2024,7,11))
+# st.write(date)
 
-time_set = st.time_input("Enter you meal time", value = datetime.time(14,00))
+# time_set = st.time_input("Enter you meal time", value = datetime.time(14,00))
+# #
+# fl = st.file_uploader(
+#     label = "upload here"
+# )
+# if fl:
+#     st.write(fl.type)
+#     if "image" in fl.type:
+#         img = Image.open(fl)
+#         st.write(np.array(img).shape)
+#     elif fl.type =="text/plain":
+#         stringio = StringIO(fl.getvalue().decode("utf-8"))
+#         string_data = stringio.read()
+#         st.write(string_data)
+
+#using the camera as input
+# picture = st.camera_input("Take a pic")
+# if picture:
+#     img = Image.open(picture)
+#     st.write(np.array(img).shape) 
+
+#color picker
+# color = st.color_picker("Pick a color")
+# if color:
+#     st.write("YOu selected", color)
+
+
+# img = Image.open("doggo.jpg")
+# #cv2 uses the bgr format
+# # img = cv2.imread("doggo.jpg")
+
+# st.image(
+#     img,
+#     caption = "Image of a dog, bicycle and a truck",
+#     width = 800,
+#     channels = "RGB"
+# )
+
+# st.image(
+#     img,
+#     caption = "Image of a dog, bicycle and a truck",
+#     width = 800,
+#     channels = "BGR"
+# )
+# st.audio("audio_file.mp3")
+# st.audio("audio_file.mp3",start_time = 10)
+#st.video("doggo_video.mp4")
+
+
+# # layout containers
+
+# # sidebar
+# choice = st.sidebar.radio(
+#     label = "Choose the option",
+#     options = ("audio","video")
+# )
+# if choice == "audio":
+#     st.audio("audio_file.mp3")
+#     st.write("This is audio")
+# elif choice == "video":
+#     st.video("video_file.mp4")
+#     st.write("This is a video file")
+
+# #colums - vertical columns
+# col1,col2 = st.columns(2, gap = "small")
+## col1,col2 = st.columns([1,3], gap = "small")
+# col1.audio("audio_file.mp3")
+# col1.write("This is audio")
+# col2.video("dog_video.mp4")
+
+# tab1,tab2  = st.tabs(["audio","video"])
+# tab1.audio("audio_file.mp3")
+# tab1.write("hi")
+# tab2.video("doggo_vid.mp4")
+
+# #expander
+# exp = st.expander("See pic")
+# exp.write("Video and image")
+# exp.image("doggo.jpg", width = 400)
+
+
+# cont = st.container()
+# cont.write("One")
+# st.write("Two")
+# cont.write("Three")
+# st.write("This is last")
+# cont.write("Last")
+
+# #progress bar
+# txt = "% completed"
+# my_bar = st.progress(0 , text = txt)
+# for pr in range(100):
+#     time.sleep(0.1)
+#     my_bar.progress(pr + 1 , text = txt)
+
+# #spinner
+# with st.spinner("wait for it..."):
+#     time.sleep(5)
+# st.write("wait over")
+
+# st.balloons()
+
+# st.snow()
+#st.error("this is an error")
+# st.warning("this is a warning")
+# st.info("This is an infromational msg")
+# st.success("This is a sucess msg")
+
+# e = RuntimeError("Exp")
+# st.exception(e)
+# email = st.text_input("Enter mail")
+# if not email:
+#     st.warning("Enter your email please")
+#     st.stop()
+# st.success("go ahead")
+
+# form = st.form("Basic form")
+# name = form.text_input("Name")
+# age = form.slider("Age", min_value = 18, max_value = 100, step =1)
+# date = form.date_input("Birthday", value = datetime.date(2024,7, 9))
+# submitted = form.form_submit_button("Submit")
+
+# # if submitted:
+# #     st.write(name , age , date)
+
+# st.set_page_config(
+#     page_title = "New app" ,
+#     layout = "wide"
+# )  
+# st.write("hi")
+
+# def summ(a , b):
+#     return a + b
+
+# with st.echo():
+#     def mult(a , b):
+#         return a * b
+#     a = 10
+#     b = 20
+#     su = summ(a , b)
+#     mu = mult(a , b)
+#     st.write(su , mu)
+# st.write("This is outside")
+
+
+# # st.help(datetime.time)
+
+# df1 = pd.DataFrame(
+#     np.random.randn(10 , 2) ,
+#     columns = ["col1" , "col2"]
+# )
+# my_table = st.table(df1)
+
+# df2 = pd.DataFrame(
+#     np.random.randn(1 , 2) ,
+#     columns = ["col1" , "col2"]
+# )
+
+# my_table.add_rows(df2)
+
+# my_chart = st.line_chart(df1)
+# my_chart.add_rows(df2)
+
+# my_chart = st.line_chart(df1)
+# for i in range(5):
+#     time.sleep(1)
+#     df2 = pd.DataFrame(
+#         np.random.randn(1 , 2) ,
+#         columns = ["col1" , "col2"]
+#     )
+#     my_chart.add_rows(df2)
